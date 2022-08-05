@@ -8,6 +8,7 @@ import './styles/main.scss';
 
 function App() {
   return (
+    <>
     <Switch>
      <PublicRoute path="/signin">
           <Signin />
@@ -16,6 +17,7 @@ function App() {
           <Home />
      </PrivateRoute>
     </Switch>
+    </>
   );
 }
 
