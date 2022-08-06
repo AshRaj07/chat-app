@@ -1,22 +1,22 @@
 import { Switch } from "react-router";
-import "rsuite/dist/styles/rsuite-default.min.css"
+import "rsuite/dist/styles/rsuite-default.min.css";
 import PrivateRoute from "./components/PrivateRoute";
 import PublicRoute from "./components/PublicRoute";
 import Home from "./pages/Home";
 import Signin from "./pages/Signin";
-import './styles/main.scss';
+import "./styles/main.scss";
 
 function App() {
   return (
     <>
-    <Switch>
-     <PublicRoute path="/signin">
+      <Switch>
+        <PublicRoute path="/signin">
           <Signin />
-     </PublicRoute>
-     <PrivateRoute path="/">
+        </PublicRoute>
+        <PrivateRoute path="/">
           <Home />
-     </PrivateRoute>
-    </Switch>
+        </PrivateRoute>
+      </Switch>
     </>
   );
 }
