@@ -31,7 +31,7 @@ export async function getUserUpdate(userId, keyToUpdate, value, db) {
     const [msgSnap,roomSnap] = await Promise.all([getMsgs,getRooms])
 
     msgSnap.forEach(mSnap => {
-        updates[`/messages/${msgSnap.key}/author/${keyToUpdate}`] = value
+        updates[`/messages/${mSnap.key}/author/${keyToUpdate}`] = value
     })
 
     roomSnap.forEach(roomSnap => {
