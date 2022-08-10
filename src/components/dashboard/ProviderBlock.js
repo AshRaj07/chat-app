@@ -4,18 +4,14 @@ import { Alert, Button, Icon, Tag } from "rsuite";
 import firebase from "firebase";
 
 const ProviderBlock = () => {
-  const [isConnected, setisConnected] = useState(
-    {
-      "google.com": auth.currentUser.providerData.some(
-        (data) => data.providerId === "google.com"
-      ),
-    },
-    {
-      "facebook.com": auth.currentUser.providerData.some(
-        (data) => data.providerId === "facebook.com"
-      ),
-    }
-  );
+  const [isConnected, setisConnected] = useState({
+    'google.com': auth.currentUser?.providerData?.some(
+      data => data.providerId === 'google.com'
+    ),
+    'facebook.com': auth.currentUser?.providerData?.some(
+      data => data.providerId === 'facebook.com'
+    ),
+  });
   const updateIsConnected = (providerId, value) => {
     setisConnected((prevState) => {
       return {

@@ -22,7 +22,7 @@ const Messages = () => {
         }
     },[chatId])
   return (
-    <ul style={{'list-style':'none'}}>
+    <ul style={{'listStyle':'none'}}>
         {isChatEmpty&&<li>No messages yet</li>}
         {canShowMsg&&messages.map(msg => <MessageItem key={msg.id} message={msg} />)}
     </ul>
