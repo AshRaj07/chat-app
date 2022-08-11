@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
+import { Alert } from 'rsuite';
 import { database } from '../../../misc/firebase';
 import { transformToArrWithId } from '../../../misc/helper';
 import MessageItem from './MessageItem';
@@ -21,10 +22,29 @@ const Messages = () => {
             msgRef.off('value')
         }
     },[chatId])
+
+    const handleAdmin = useCallback(async(uid)=>{
+        const adminsRef = database.ref(`/rooms/${chatId}/admins`)
+        let alertMsg;
+        await adminsRef.transaction(admins=>{
+            if(admins){
+                if(admins[uid]){
+                    admins[uid] = null;
+                    alertMsg="Admin permission Revoked";
+                }else{
+                    admins[uid]=true;
+                    alertMsg="Admin permission Granted"
+                }
+                return admins;
+            }
+        })
+        Alert.info(alertMsg,2000)
+    },[chatId])
+
   return (
     <ul style={{'listStyle':'none'}}>
         {isChatEmpty&&<li>No messages yet</li>}
-        {canShowMsg&&messages.map(msg => <MessageItem key={msg.id} message={msg} />)}
+        {canShowMsg&&messages.map(msg => <MessageItem key={msg.id} message={msg} handleAdmin={handleAdmin} />)}
     </ul>
   )
 }
