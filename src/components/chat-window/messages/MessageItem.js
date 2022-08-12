@@ -7,10 +7,22 @@ import { auth } from "../../../misc/firebase";
 import ProfileAvatar from "../../dashboard/ProfileAvatar";
 import PresenceDot from "../../PresenceDot";
 import IconBtnControl from "./IconBtnControl";
+import ImgBtnModal from "./ImgBtnModal";
 import ProfileInfoBtnModal from "./ProfileInfoBtnModal";
 
+const renderFileMessage = (file) => {
+  if(file.contentType.includes('image')){
+    return (
+      <div className="height-220">
+        <ImgBtnModal src={file.url} fileName={file.name} />
+      </div>
+    )
+  }
+  return <a href={file.url}>Download {file.name}</a>
+}
+
 const MessageItem = ({ message, handleAdmin, handleLike,handleDelete }) => {
-  const { author, createdAt, text, likes, likeCount } = message;
+  const { author, createdAt, text,file ,likes, likeCount } = message;
   const isAdmin = useCurrentRoom((v) => v.isAdmin);
   const admins = useCurrentRoom((v) => v.admins);
   const isMsgAuthorAdmin = admins.includes(author.uid);
@@ -64,7 +76,10 @@ const MessageItem = ({ message, handleAdmin, handleLike,handleDelete }) => {
           />
         )}
       </div>
-      <div className="word-break-all">{text}</div>
+      <div >
+        {text && <span className="word-break-all">{text}</span>}
+        {file && renderFileMessage(file)}
+      </div>
     </li>
   );
 };
