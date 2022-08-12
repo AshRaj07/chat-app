@@ -4,6 +4,7 @@ import firebase from 'firebase'
 import { useProfile } from '../../../context/profile.context'
 import { useParams } from 'react-router'
 import { database } from '../../../misc/firebase'
+import AttachmentBtnModel from './AttachmentBtnModel'
 
 function assembleMessage(profile,chatId){
     return{
@@ -59,9 +60,35 @@ const Bottom = () => {
             onSendClick()
         }
     }
+
+    const afterUpload = useCallback(async(files)=>{
+        setIsLoading(true)
+        const updates = {};
+        files.forEach(file => {
+            const msgData = assembleMessage(profile,chatId)
+            msgData.file = file;
+            const messageId = database.ref('message').push().key;
+            updates[`/messages/${messageId}`] = msgData
+            const lastMsgId = Object.keys(updates).pop()
+            updates[`/rooms/${chatId}/lastMessage`] = {
+                ...updates[lastMsgId],
+                msgId:lastMsgId
+            }
+        })
+        setIsLoading(true);
+        try {
+            await database.ref().update(updates)
+            setIsLoading(false)
+        } catch (error) {
+            setIsLoading(false)
+            Alert.error(error.message)
+        }
+    },[chatId, profile])
+
   return (
     <div>
         <InputGroup>
+        <AttachmentBtnModel afterUpload={afterUpload} />
         <Input placeholder="Write a message here..."
         value={input}
         onChange={onInputChange}
